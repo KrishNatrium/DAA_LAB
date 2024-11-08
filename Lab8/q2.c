@@ -12,7 +12,6 @@ typedef struct
     int n;
 } DisjointSet;
 
-// Function to create a disjoint set
 DisjointSet *createDisjointSet(int n)
 {
     DisjointSet *ds = (DisjointSet *)malloc(sizeof(DisjointSet));
@@ -29,7 +28,6 @@ DisjointSet *createDisjointSet(int n)
     return ds;
 }
 
-// Find function with path compression
 int find(DisjointSet *ds, int u)
 {
     if (ds->parent[u] != u)
@@ -39,7 +37,6 @@ int find(DisjointSet *ds, int u)
     return ds->parent[u];
 }
 
-// Union function with union by rank
 void unionSets(DisjointSet *ds, int u, int v)
 {
     int rootU = find(ds, u);
@@ -63,7 +60,6 @@ void unionSets(DisjointSet *ds, int u, int v)
     }
 }
 
-// Comparison function for sorting edges
 int compareEdges(const void *a, const void *b)
 {
     Edge *edge1 = (Edge *)a;
@@ -71,7 +67,6 @@ int compareEdges(const void *a, const void *b)
     return edge1->w - edge2->w;
 }
 
-// Kruskal's algorithm
 void kruskal(int n, int m, Edge edges[])
 {
     DisjointSet *ds = createDisjointSet(n);
@@ -82,8 +77,8 @@ void kruskal(int n, int m, Edge edges[])
 
     for (int i = 0; i < m; i++)
     {
-        int u = edges[i].u - 1; // Adjust to 0-based index
-        int v = edges[i].v - 1; // Adjust to 0-based index
+        int u = edges[i].u - 1;
+        int v = edges[i].v - 1;
 
         if (find(ds, u) != find(ds, v))
         {
@@ -95,7 +90,6 @@ void kruskal(int n, int m, Edge edges[])
 
     printf("Total Weight of the Spanning Tree: %d\n", mstCost);
 
-    // Free the memory
     free(ds->parent);
     free(ds->rank);
     free(ds);

@@ -3,29 +3,24 @@
 #include <string.h>
 
 #define MAX 100
-
-// Structure to represent a symbol
 struct SYMBOL
 {
-    char alphabet; // character
-    int frequency; // frequency of the character
+    char alphabet;
+    int frequency;
 };
 
-// Structure to represent a node in the Huffman tree
 struct Node
 {
     struct SYMBOL symbol;
     struct Node *left, *right;
 };
 
-// Min-Heap Priority Queue
 struct MinHeap
 {
     int size;
     struct Node *heap[MAX];
 };
 
-// Function to create a new node with a given symbol
 struct Node *createNode(struct SYMBOL symbol)
 {
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
@@ -34,7 +29,6 @@ struct Node *createNode(struct SYMBOL symbol)
     return newNode;
 }
 
-// Function to swap two nodes in the heap
 void swap(struct Node **a, struct Node **b)
 {
     struct Node *temp = *a;
@@ -42,7 +36,6 @@ void swap(struct Node **a, struct Node **b)
     *b = temp;
 }
 
-// Min-Heapify function to maintain heap property
 void minHeapify(struct MinHeap *minHeap, int i)
 {
     int smallest = i;
@@ -62,7 +55,6 @@ void minHeapify(struct MinHeap *minHeap, int i)
     }
 }
 
-// Function to extract the node with the minimum frequency from the heap
 struct Node *extractMin(struct MinHeap *minHeap)
 {
     if (minHeap->size <= 0)
@@ -81,7 +73,6 @@ struct Node *extractMin(struct MinHeap *minHeap)
     return root;
 }
 
-// Function to insert a new node into the Min-Heap
 void insertMinHeap(struct MinHeap *minHeap, struct Node *node)
 {
     minHeap->size++;
@@ -95,20 +86,17 @@ void insertMinHeap(struct MinHeap *minHeap, struct Node *node)
     }
 }
 
-// Function to build the Huffman Tree
 struct Node *buildHuffmanTree(struct SYMBOL symbols[], int n)
 {
     struct MinHeap minHeap;
     minHeap.size = 0;
 
-    // Create a Min-Heap with all the symbols
     for (int i = 0; i < n; i++)
     {
         struct Node *newNode = createNode(symbols[i]);
         insertMinHeap(&minHeap, newNode);
     }
 
-    // Build the tree
     while (minHeap.size > 1)
     {
         struct Node *left = extractMin(&minHeap);
@@ -116,7 +104,7 @@ struct Node *buildHuffmanTree(struct SYMBOL symbols[], int n)
 
         struct SYMBOL internalSymbol;
         internalSymbol.frequency = left->symbol.frequency + right->symbol.frequency;
-        internalSymbol.alphabet = '$'; // Internal node doesn't have a character
+        internalSymbol.alphabet = '$';
 
         struct Node *internalNode = createNode(internalSymbol);
         internalNode->left = left;
@@ -128,14 +116,13 @@ struct Node *buildHuffmanTree(struct SYMBOL symbols[], int n)
     return extractMin(&minHeap);
 }
 
-// In-order traversal of the Huffman Tree
 void inorderTraversal(struct Node *root)
 {
     if (root == NULL)
         return;
 
     inorderTraversal(root->left);
-    if (root->symbol.alphabet != '$') // Print only the leaves
+    if (root->symbol.alphabet != '$')
         printf("%c ", root->symbol.alphabet);
     inorderTraversal(root->right);
 }
@@ -160,10 +147,8 @@ int main()
         scanf("%d", &symbols[i].frequency);
     }
 
-    // Build Huffman Tree
     struct Node *root = buildHuffmanTree(symbols, n);
 
-    // Print in-order traversal of the tree (Huffman)
     printf("In-order traversal of the tree (Huffman): ");
     inorderTraversal(root);
     printf("\n");
